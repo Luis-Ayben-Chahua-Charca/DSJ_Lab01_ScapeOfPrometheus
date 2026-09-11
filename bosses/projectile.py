@@ -1,6 +1,6 @@
 import pygame
 
-from core.asset_loader import load_image
+from core.asset_loader import load_image, load_sound
 from core.constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from data.config import PLASMA_BALL_SIZE
 
@@ -29,6 +29,8 @@ class BossProjectile:
         self.y = center_y - self.image.get_height() / 2
         self.direction = direction
         self.speed = speed
+
+        load_sound("plasma_shot.mp3").play()
 
     def update(self):
         self.x += self.direction[0] * self.speed

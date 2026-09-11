@@ -182,3 +182,10 @@ ITEM_HUD_MARGIN = 10
 ITEM_HUD_BADGE_FONT_SIZE = 16
 ITEM_HUD_BADGE_COLOR = (20, 20, 20)
 ITEM_HUD_BADGE_TEXT_COLOR = (255, 255, 255)
+
+# ==========================================
+# Audio
+# ==========================================
+# Segundos de fade-out de la pista actual antes de arrancar la siguiente en
+# loop (exploración -> tema de jefe), para que el cambio no sea un corte seco.
+MUSIC_TRANSITION_FADE_DURATION = 0.5

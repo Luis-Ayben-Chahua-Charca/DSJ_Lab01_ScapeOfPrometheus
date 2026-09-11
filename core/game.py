@@ -1,12 +1,12 @@
 import random
 
 import pygame
-from pygame import mixer
 
-from bosses.boss_factory import create_boss
+from bosses.boss_factory import BOSS_THEME_FILES, create_boss
 from bosses.boss_pool import draw_next_boss
-from core.asset_loader import load_image, load_sound, music_path
+from core.asset_loader import load_image, load_sound
 from core.constants import BLACK, CAPTION, FPS, SCREEN_HEIGHT, SCREEN_WIDTH
+from core.music import MusicManager
 from data.config import BOSS_MIN_Y, BOSS_SIZE, ITEM_DROP_CHANCE, PICKUP_SIZE, PLAYER_SIZE, SHIELD_DROP_CHANCE
 from entities.enemy import Enemy
 from entities.player import Player
@@ -24,6 +24,10 @@ from ui.minimap import Minimap
 from ui.room_renderer import draw_room
 from ui.victory import VictoryScreen
 from weapons.bullet import Bullet
+
+# Soundtrack de exploración (assets/music/): suena en loop en todas las salas
+# salvo boss_room, que tiene su propio tema por jefe (ver BOSS_THEME_FILES).
+EXPLORATION_MUSIC = "soundtrack.mp3"
 
 STATE_PLAYING = "playing"
 STATE_VICTORY = "victory"
@@ -51,8 +55,8 @@ class Game:
         )
         self.clock = pygame.time.Clock()
 
-        mixer.music.load(music_path("background.wav"))
-        mixer.music.play(-1)
+        self.music = MusicManager()
+        self.music.play_immediately(EXPLORATION_MUSIC)
 
         pygame.display.set_caption(CAPTION)
         pygame.display.set_icon(load_image("ufo.png"))
@@ -80,6 +84,7 @@ class Game:
     def run(self):
         while self.running:
             dt = self.clock.tick(FPS) / 1000.0
+            self.music.tick(dt)
 
             self.screen.fill(BLACK)
             self.screen.blit(self.background, (0, 0))
@@ -158,6 +163,8 @@ class Game:
         self.player.draw()
 
         if not self.player.is_alive:
+            self.music.stop()
+            load_sound("defeat.mp3").play()
             self.state = STATE_GAME_OVER
 
     def _handle_shooting(self):
@@ -186,6 +193,11 @@ class Game:
         if self.boss is None:
             x = SCREEN_WIDTH / 2 - BOSS_SIZE / 2
             self.boss = create_boss(self.current_boss_id, self.screen, x, BOSS_MIN_Y)
+
+            # Primera vez que se entra a boss_room en esta run: mismo punto
+            # donde arranca el fade-in del sprite del jefe.
+            load_sound("boss_appear.mp3").play()
+            self.music.switch_to(BOSS_THEME_FILES[self.current_boss_id])
 
         boss = self.boss
         new_projectiles = boss.update(dt, self.player)
@@ -223,6 +235,11 @@ class Game:
         self.boss_hud.draw(self.screen, boss)
 
         if not boss.is_alive:
+            # Reusa el mismo sonido de muerte de enemigo común (no hay un
+            # asset dedicado para la derrota del jefe) — ver Agents.md.
+            load_sound("explosion.wav").play()
+            self.music.stop()
+            load_sound("victory.mp3").play()
             self.state = STATE_VICTORY
 
     def _update_boss_projectiles(self):
@@ -309,6 +326,7 @@ class Game:
 
         for pickup in list(room.pickups):
             if rects_collide(self.player, pickup) and pickup.apply_to(self.player):
+                load_sound("grabbed_item.mp3").play()
                 room.remove_pickup(pickup)
                 continue
 
@@ -320,6 +338,7 @@ class Game:
         self.score.reset()
         self.room_manager.reset()
         Enemy.reset_chase_speed_multiplier()
+        self.music.play_immediately(EXPLORATION_MUSIC)
 
         self.boss = None
         self.boss_projectiles = []

@@ -8,6 +8,8 @@ Python + [Pygame](https://www.pygame.org/) (2.6.1).
 
 ## Cómo correrlo
 
+**Requiere Python 3.11 o 3.12** — pygame 2.6.1 no tiene wheels para 3.13+ (falla al intentar compilar desde código fuente).
+
 ```bash
 pip install -r requirements.txt
 python main.py

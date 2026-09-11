@@ -47,13 +47,13 @@ El mapa es fijo, con 9 salas: una sala inicial (`start`, sin enemigos) desde la 
 
 ## Jefes
 
-Al entrar por primera vez a la sala del jefe aparece uno de estos 3 (elegido al azar, sin repetir hasta agotar los 3), con un fade-in de su sprite y su nombre, y una barra de vida abajo de la pantalla:
+Al entrar por primera vez a la sala del jefe aparece uno de estos 3 (elegido al azar, sin repetir hasta agotar los 3), con el doble de tamaño de un enemigo común, un fade-in de su sprite y su nombre, y una barra de vida abajo de la pantalla:
 
 - **Apolo** — se acerca brevemente, gira sobre sí mismo (telegraph del ataque) y dispara una ráfaga de proyectiles en 8 direcciones a la vez.
-- **Anubis** — no persigue: se alinea con la columna del jugador y dispara un rayo continuo hacia abajo por esa columna.
-- **Loki** — se queda fijo arriba y alterna entre disparo recto, diagonal y una ráfaga de 5 proyectiles paralelos (con espacio para esquivar moviéndose al costado).
+- **Anubis** — no persigue: se alinea con la columna del jugador, muestra una advertencia breve y dispara un rayo continuo por esa columna.
+- **Loki** — se desvanece y se teletransporta a una de las 4 paredes de la sala; tras una breve pausa, encadena varios ataques seguidos (disparo recto, diagonal, o una ráfaga de proyectiles paralelos, según hacia dónde da esa pared) antes de desvanecerse otra vez y cambiar de pared.
 
-Los tres dañan al jugador por contacto directo además de con sus ataques. Las balas del jugador les restan vida de a 1 por impacto; llegar a 0 gana la run.
+Los tres dañan al jugador por contacto directo además de con sus ataques. Las balas del jugador les restan vida por impacto; llegar a 0 gana la run.
 
 ## Cómo se gana
 
@@ -68,6 +68,14 @@ Los enemigos muertos por bala también pueden (1 de cada 10, en un dado aparte d
 3. **Asteroide** — las balas atraviesan enemigos en vez de destruirse al primer impacto, pudiendo matar a varios en su trayectoria.
 4. **Satélite** — hace más lenta la persecución de todos los enemigos del mapa, incluso los que todavía no aparecieron.
 5. **Astronauta** — agrega 2 escudos al máximo de vida (vacíos; se llenan recogiendo escudos normales).
+
+## HUD en pantalla
+
+Además de los escudos de vida (arriba a la izquierda) y el puntaje, el jugador ve en todo momento qué ítems permanentes tiene recogidos: un ícono por cada ítem del que tiene al menos una copia, con un número encima si acumuló más de una (Telescopio, Sonda o Satélite). El minimapa y, durante la pelea, el nombre y la barra de vida del jefe, completan la información en pantalla — ver las secciones correspondientes arriba.
+
+## Audio
+
+Mientras se explora el mapa suena una música de fondo distinta a la que suena durante la pelea contra el jefe: al entrar a su sala, la música cambia a un tema propio de ese jefe en particular. Además, las acciones principales del juego tienen su propio efecto de sonido: disparar, recibir daño, recoger un escudo o ítem, los proyectiles de los jefes al dispararse, y el desenlace de la run (victoria o derrota).
 
 ## Cómo reiniciar una run
 

@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from core.asset_loader import load_image
+from core.asset_loader import load_image, load_sound
 from data.config import (
     FIRE_COOLDOWN_BASE,
     PLAYER_INVULNERABILITY_DURATION,
@@ -102,6 +102,7 @@ class Player(Entity):
 
         self.hp -= amount
         self.invulnerable_time = PLAYER_INVULNERABILITY_DURATION
+        load_sound("player_hit.mp3").play()
 
     def tick_invulnerability(self, dt):
         if self.invulnerable_time > 0:
