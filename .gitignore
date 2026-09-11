@@ -1,0 +1,10 @@
+.claude/
+.claude/settings.local.json
+AGENTS.md
+CLAUDE.md
+*.local.json
+
+.venv/
+venv/
+ENV/
+env/
